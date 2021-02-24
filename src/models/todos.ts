@@ -5,7 +5,7 @@ import { message } from 'antd';
 
 export interface ITodoState {
     content: string;
-    status: number; // 1 - unfinished, 2 - finished
+    status: number; // 1 - unfinished, 2 - finished, 3 - deleted
 }
 export interface ITodosListState {
     todoList: ITodoState[];
@@ -20,7 +20,7 @@ export interface ITodosModel {
     effects: {
         addTodo: Effect;
         toggle: Effect;
-        delete: Effect;
+        hide: Effect;
         modify: Effect;
     },
 };
@@ -51,7 +51,7 @@ const TodosModel: ITodosModel = {
             const newTodoList = todosListState.concat(newTodo);
             if ( content ) {
                 yield put({
-                    type:'save',
+                    type: 'save',
                     payload: newTodoList
                 }); 
             } else {
@@ -60,18 +60,30 @@ const TodosModel: ITodosModel = {
             }         
         },        
         // 修改状态： 默认unfinished -> finished
-        *toggle( action, { call, put }){
-            const todo = action.payload;
-            if ( status ) {
+        *toggle( action, { call, put, select }){
+            const index = action.payload;
+            const todosListState = yield select( (state: any) => state.todos.todoList);
+            let todo =  todosListState[index];         
+            todo.status = (todo.status===1?2:1);
+            if ( todo ) {
                 yield put({
                     type: 'save',
-                    payload: null
+                    payload: todosListState
                 })
             }
         },
         // 从列表中删除
-        *delete(){
-
+        *hide( action, { put, select, call }){
+            const index = action.payload;
+            const todosListState = yield select( (state: any) => state.todos.todoList);
+            let todo =  todosListState[index];         
+            todo.status = 3;
+            if ( todo ) {
+                yield put({
+                    type: 'save',
+                    payload: todosListState
+                })
+            }
         },
         // 修改内容
         *modify(){

@@ -13,13 +13,13 @@ const mapDispatchToProps = dispatch => {
             type: 'todos/addTodo',
             payload: todo
         }),
-        toggle: (todo) => dispatch({
+        toggle: (index) => dispatch({
             type: 'todos/toggle',
-            payload: todo
+            payload: index
         }),
-        delete: () => dispatch({
-            type: 'todos/delete',
-            payload: null
+        hide: (index) => dispatch({
+            type: 'todos/hide',
+            payload: index
         }),
         modify: () => dispatch({
             type: 'todos/modify',
@@ -28,7 +28,7 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-const TodoList = ( { todoList, addTodo, toggle} ) => {
+const TodoList = ( { todoList, addTodo, toggle, hide } ) => {
     const [unfinished, setUnfinished] = useState(0);
     const [ todo, setTodo ] = useState({});
     console.log('in page', todoList, addTodo);
@@ -41,9 +41,16 @@ const TodoList = ( { todoList, addTodo, toggle} ) => {
             />
             <button onClick={() => addTodo(todo)}>+</button>       
             <ul>待办事项有
-                { todoList.map( (todo) => 
+                { todoList.map( (todo, index) => 
                     <span>
-                        <li onClick={()=>toggle(todo)}>{todo.content}</li><button>-</button>
+                        {
+                            todo.status !== 3 ?
+                                <>
+                                    <li key={todo.content} onClick={() => toggle(index)}>{index}：{todo.content}</li>
+                                    <button onClick={() => hide(index)}>-</button>
+                                </>
+                             : <li>i</li>
+                        }
                     </span>
                 )}
             </ul>
