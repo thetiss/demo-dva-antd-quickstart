@@ -1,7 +1,7 @@
 import React, { FC, } from 'react';
 import { Effect, } from 'dva';
 import { Reducer, } from 'redux';
-// import { message } from 'antd';
+import { message } from 'antd';
 
 export interface ITodoState {
     content: string;
@@ -27,45 +27,53 @@ export interface ITodosModel {
 
 const TodosModel: ITodosModel = {
     namespace: 'todos',
-    state: {
-        //todoList: [{content:'', status: 1}],
+    state: {        
         todoList: [],
     },
     reducers: {
+        // save简单
+        // 处理数据在effect
         save(state, action){
-            const todos = action.payload;
-            console.log('in model', todos);
-            const newTodosList = [ ...state.todoList ];  
-            console.log('in model', newTodosList.concat(todos));                      
+            const newTodosList = action.payload;
+            console.log('in model', newTodosList);
             return {
                 ...state,
-                todoList: newTodosList.concat(todos)
+                todoList: newTodosList
             };
         }
     },
     effects: {
-        *addTodo( action, { call, put }){
+        *addTodo( action, { call, put, select }){
             const  content = action.payload;
-            console.log('in model', content);             
+            console.log('in model', content);     
+            const newTodo = { content, status: 1 };
+            const todosListState = yield select( (state: any) => state.todos.todoList);
+            const newTodoList = todosListState.concat(newTodo);
             if ( content ) {
                 yield put({
                     type:'save',
-                    payload: {
-                        content,
-                        status: 1
-                    }
+                    payload: newTodoList
                 }); 
             } else {
                 // message.error('内容为空，请检查文本框输入！！！');
                 console.log('内容为空，请检查文本框输入！！！');                
             }         
         },        
-        *toggle(){
-
+        // 修改状态： 默认unfinished -> finished
+        *toggle( action, { call, put }){
+            const todo = action.payload;
+            if ( status ) {
+                yield put({
+                    type: 'save',
+                    payload: null
+                })
+            }
         },
+        // 从列表中删除
         *delete(){
 
         },
+        // 修改内容
         *modify(){
 
         }

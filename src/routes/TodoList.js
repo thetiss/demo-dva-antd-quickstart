@@ -13,9 +13,9 @@ const mapDispatchToProps = dispatch => {
             type: 'todos/addTodo',
             payload: todo
         }),
-        toggle: () => dispatch({
+        toggle: (todo) => dispatch({
             type: 'todos/toggle',
-            payload: null
+            payload: todo
         }),
         delete: () => dispatch({
             type: 'todos/delete',
@@ -28,7 +28,7 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-const TodoList = ( { todoList, addTodo } ) => {
+const TodoList = ( { todoList, addTodo, toggle} ) => {
     const [unfinished, setUnfinished] = useState(0);
     const [ todo, setTodo ] = useState({});
     console.log('in page', todoList, addTodo);
@@ -40,7 +40,13 @@ const TodoList = ( { todoList, addTodo } ) => {
                 onChange={(e) => setTodo(e.target.value)}
             />
             <button onClick={() => addTodo(todo)}>+</button>       
-            <ul>待办事项有{ todoList.map((todo) => <li>{todo.content}</li>) }</ul>
+            <ul>待办事项有
+                { todoList.map( (todo) => 
+                    <span>
+                        <li onClick={()=>toggle(todo)}>{todo.content}</li><button>-</button>
+                    </span>
+                )}
+            </ul>
    
         </>
     )
