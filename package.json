@@ -1,14 +1,19 @@
 {
   "private": true,
   "scripts": {
-    "start": "roadhog server",
+    "start": "set PORT=8000&&roadhog server",
     "build": "roadhog build",
     "lint": "eslint --ext .js src test",
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@material-ui/core": "^4.9.9",
+    "@material-ui/core": "^4.9.9",  
+    "@material-ui/icons": "2.0.1", 
     "@types/material-ui": "^0.21.8",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-redux": "^7.1.16",
+    "@types/react-router-dom": "^5.1.7",    
+    "babel-runtime": "^6.9.2",
     "antd": "^4.12.3",
     "dva": "^2.4.1",
     "react": "^16.2.0",
