@@ -3,7 +3,7 @@ import { connect } from 'dva';
 
 const mapStateToProps = state => {
     return {
-        todoList: state.todos.todoList, // 
+        todoList: state.todos.todoList, // 必须要加上namespace
     }
 };
 
