@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
+import InputLabel from "@material-ui/core/InputLabel";
+import withStyles from "@material-ui/core/styles/withStyles";
+import Button from '@material-ui/core/Button';
+
 
 const mapStateToProps = state => {
     return {
@@ -29,7 +33,6 @@ const mapDispatchToProps = dispatch => {
 };
 
 const TodoList = ( { todoList, addTodo, toggle, hide } ) => {
-    const [unfinished, setUnfinished] = useState(0);
     const [ todo, setTodo ] = useState({});
     let unfinishedCount = 0;
     todoList.map( item => unfinishedCount = item.status === 3 || item.status === 2 ? unfinishedCount : unfinishedCount+1);
@@ -37,6 +40,8 @@ const TodoList = ( { todoList, addTodo, toggle, hide } ) => {
         <>
             <h2>Todo List Here</h2>
             <h4>待办事项有{ unfinishedCount }项</h4>
+            <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel>
+            <Button>Material-UI</Button>
             {}
             <input 
                 onChange={(e) => setTodo(e.target.value)}

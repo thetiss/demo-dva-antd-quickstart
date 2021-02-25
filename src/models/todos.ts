@@ -1,7 +1,7 @@
 import React, { FC, } from 'react';
 import { Effect, } from 'dva';
 import { Reducer, } from 'redux';
-import { message } from 'antd';
+// import { message } from 'antd';
 
 export interface ITodoState {
     content: string;
