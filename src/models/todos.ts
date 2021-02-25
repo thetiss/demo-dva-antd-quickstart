@@ -32,10 +32,10 @@ const TodosModel: ITodosModel = {
     },
     reducers: {
         // save简单
-        // 处理数据在effect
+        // 业务逻辑处理数据在effect
         save(state, action){
             const newTodosList = action.payload;
-            console.log('in model', newTodosList);
+            console.log('reducer', newTodosList);
             return {
                 ...state,
                 todoList: newTodosList
@@ -45,10 +45,12 @@ const TodosModel: ITodosModel = {
     effects: {
         *addTodo( action, { call, put, select }){
             const  content = action.payload;
-            console.log('in model', content);     
+            console.log('effect', content);     
             const newTodo = { content, status: 1 };
             const todosListState = yield select( (state: any) => state.todos.todoList);
             const newTodoList = todosListState.concat(newTodo);
+            console.log('effect, addTodo', newTodoList);
+            
             if ( content ) {
                 yield put({
                     type: 'save',
@@ -63,25 +65,29 @@ const TodosModel: ITodosModel = {
         *toggle( action, { call, put, select }){
             const index = action.payload;
             const todosListState = yield select( (state: any) => state.todos.todoList);
-            let todo =  todosListState[index];         
-            todo.status = (todo.status===1?2:1);
+            let newTodoList: ITodoState[] = [];
+            newTodoList = newTodoList.concat(todosListState);
+            let todo =  newTodoList[index];         
+            todo.status = (todo.status === 1 ? 2 : 1);           
             if ( todo ) {
                 yield put({
                     type: 'save',
-                    payload: todosListState
+                    payload: newTodoList
                 })
             }
         },
         // 从列表中删除
         *hide( action, { put, select, call }){
             const index = action.payload;
-            const todosListState = yield select( (state: any) => state.todos.todoList);
-            let todo =  todosListState[index];         
+            const todosListState = yield select( (state: any) => state.todos.todoList);     
+            let newTodoList: ITodoState [] = [];
+            newTodoList = newTodoList.concat(todosListState); 
+            let todo =  newTodoList[index];         
             todo.status = 3;
             if ( todo ) {
                 yield put({
                     type: 'save',
-                    payload: todosListState
+                    payload: newTodoList
                 })
             }
         },
